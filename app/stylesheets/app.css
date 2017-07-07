@@ -1,52 +1,106 @@
+.section {
+    margin: 20px;
+}
+
 body {
-  margin-left: 25%;
-  margin-right: 25%;
-  margin-top: 10%;
-  font-family: "Open Sans", sans-serif;
+    font-family: Arial, sans-serif;
 }
 
-label {
-  display: inline-block;
-  width: 100px;
-}
-
-input {
-  width: 500px;
-  padding: 5px;
-  font-size: 16px;
-}
-
-button {
-  font-size: 16px;
-  padding: 5px;
-}
-
-h1, h2 {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 0px;
-  margin-bottom: 10px;
+.section {
+    margin: 20px;
 }
 
 h2 {
-  color: #AAA;
-  font-size: 32px;
+    color: gray;
 }
 
-h3 {
-  font-weight: normal;
-  color: #AAA;
-  font-size: 24px;
+.highlight {
+    color: black;
 }
 
-.black {
-  color: black;
+label {
+    width: 200px;
+    display: inline-block;
+    text-align: right;
+    margin-left: -75px;
 }
 
-#balance {
-  color: black;
+input#payer:hover {
+    cursor: pointer;
+    cursor: hand;
 }
 
-.hint {
-  color: #666;
+input:read-only {
+    cursor: no-drop;
+}
+
+table,
+th,
+td,
+tr {
+    border: 1px solid black;
+    text-align: center;
+}
+
+th,
+td {
+    padding: 5px;
+}
+
+.noformat table {
+    border: 0px;
+}
+
+button:enabled:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
+button#changeQuota,
+button#changeLocation {
+    background-color: yellow;
+}
+
+button#buyTicket,
+button#buyTickets {
+    background-color: #98fb98;
+}
+
+button#refundTicket {
+    background-color: pink;
+}
+
+button#createWallet {
+    background-color: #add8e6;
+}
+
+button#destroyContract {
+    background-color: pink;
+}
+
+button#setRating:enabled {
+    background-color: cyan;
+}
+
+#seed {
+    color: green;
+}
+
+.left {
+    width: 40%;
+    float: left
+}
+
+.right,
+.middle {
+    width: 20%;
+    float: left
+}
+
+.clear {
+    clear: both
+}
+
+sub {
+    font-weight: normal;
 }
