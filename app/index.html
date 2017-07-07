@@ -1,23 +1,123 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>MetaCoin - Truffle Webpack Demo w/ Frontend</title>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-  <script src="./app.js"></script>
-</head>
-<body>
-  <h1>MetaCoin</h1>
-  <h2>Example Truffle Dapp</h2>
-  <h3>You have <span class="black"><span id="balance"></span> META</span></h3>
 
-  <br>
-  <h1>Send MetaCoin</h1>
-  <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
-  <br><label for="receiver">To Address:</label><input type="text" id="receiver" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
-  <br><br><button id="send" onclick="App.sendCoin()">Send MetaCoin</button>
-  <br><br>
-  <span id="status"></span>
-  <br>
-  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
+<head>
+    <title>ParkingLot DApp</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+    <!--jQuery-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="./app.js"></script>
+</head>
+
+<body>
+    <h1>Parking Lot</h1>
+    <div class="section">
+        <div class="left">Contract deployed at:
+            <div id="contAddress"></div>
+        </div>
+        <div class="middle">Parking Balance:
+            <h2 class="highlight">
+                <div id="contBalance">0</div>
+            </h2>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="section">
+        <h2>Registered Cars</h2>
+        <table id="carsTable">
+            <tr>
+                <th>Vehicle Number</th>
+                <th>Vehicle Owner</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Add Vehicle</h2>
+        <label for="vnum">Vehicle Number: </label>
+        <input type="text" id="vnum" value="">
+        <br>
+        <label for="owner">Vehicle Owner: </label>
+        <input type="text" id="owner" value="">
+        <br><br>
+        <button id="addVehicle">Add Vehicle</button>
+        <span id="addVehicleResult"></span>
+    </div>
+
+    <hr/>
+    <div class="section">
+        <h2>Currently Parked Vehicles</h2>
+        <table id="carsTable">
+            <tr>
+                <th>In-time</th>
+                <th>Vehicle Number</th>
+                <th>Vehicle Owner</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Check-in Vehicle</h2>
+        <label for="vnum-chkin">Vehicle Number: </label>
+        <input type="text" id="vnum-chkin" value="">
+        <br>
+        <label for="owner-chkin">Vehicle Owner: </label>
+        <input type="text" id="owner-chkin" value="">
+        <br>
+        <label for="time-chkin">Check-in Time: </label>
+        <input type="text" id="time-chkin" value="">
+        <br><br>
+        <button id="check-in">check-in</button>
+        <span id="checkinResult"></span>
+    </div>
+
+    <div class="section">
+        <h2>Check-out Vehicle</h2>
+        <label for="vnum-chkout">Vehicle Number: </label>
+        <input type="text" id="vnum-chkout" value="">
+        <br>
+        <label for="offerCode">OfferCode: </label>
+        <input type="text" id="owner-chkin" value="">
+        <br>
+        <label for="time-chkout">Check-out Time: </label>
+        <input type="text" id="time-chout" value="">
+        <br><br>
+        <button id="check-out">check-out</button>
+        <br><br>
+        <label for="amt">Amount to Pay: </label>
+        <input type="text" id="amt" value="" readonly>
+        <input type="radio" id="payer" name="payer" value="self">Self
+        <input type="radio" id="payer" name="payer" value="other">Other
+        <button id="pay">Pay</button>
+        <span id="paymentResult"></span>
+    </div>
+
+    <div class="section">
+        <h2>Parking History</h2>
+        <table id="historyTable">
+            <tr>
+                <th>In-time</th>
+                <th>Out-time</th>
+                <th>Vehicle Number</th>
+                <th>Offer Code</th>
+                <th>Amount Paid</th>
+                <th>Paid By</th>
+            </tr>
+        </table>
+    </div>
+
+    <hr/>
+    <div class="section">
+        <h2>Destroy Contract</h2>
+        <button id="destroyContract">Destroy Contract</button>
+        <span id="destroyContractResult"></span>
+    </div>
+
+    <hr/>
 </body>
+
 </html>
