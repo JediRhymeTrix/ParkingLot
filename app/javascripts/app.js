@@ -24,10 +24,10 @@ function getBalance(address) {
 }
 
 window.App = {
-    start: function () {
+    start: function() {
         var self = this
 
-        web3.eth.getAccounts(function (err, accs) {
+        web3.eth.getAccounts(function(err, accs) {
             if (err != null) {
                 alert('There was an error fetching your accounts.')
                 return
@@ -44,9 +44,9 @@ window.App = {
         })
     },
 
-    initializeParkingLot: function () {
+    initializeParkingLot: function() {
         var self = this
-        ParkingLot.deployed().then(function (instance) {
+        ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
             $('#contAddress').html(parkingLot.address)
             $('#contBalance').html(getBalance(parkingLot.address))
@@ -55,12 +55,12 @@ window.App = {
         $.loadAddresses()
     },
 
-    addVehicle: function (owner, vNum) {
+    addVehicle: function(owner, vNum) {
         var self = this
-        ParkingLot.deployed().then(function (instance) {
+        ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
             parkingLot.registeredVehicles.call(vNum).then(
-                function (status) {
+                function(status) {
                     console.log(status)
                     if (status != "0x0000000000000000000000000000000000000000")
                         $('#addVehicleResult').html("Already Registered")
@@ -68,9 +68,9 @@ window.App = {
                         parkingLot.getRegistered(vNum, {
                             from: owner
                         }).then(
-                            function () {
+                            function() {
                                 parkingLot.registeredVehicles.call(vNum).then(
-                                    function (vAddress) {
+                                    function(vAddress) {
                                         console.log(vAddress)
                                         console.log(owner)
                                         if (vAddress == owner) {
@@ -82,17 +82,17 @@ window.App = {
                             })
                     }
                 })
-        }).catch(function (e) {
+        }).catch(function(e) {
             console.log(e)
         })
     },
 
-    checkIn: function (vNum, time) {
+    checkIn: function(vNum, time) {
         var self = this
-        ParkingLot.deployed().then(function (instance) {
+        ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
             parkingLot.isParked.call(vNum).then(
-                function (status) {
+                function(status) {
                     console.log(status)
                     if (status)
                         $('#checkinResult').html('Already Checked In')
@@ -100,10 +100,10 @@ window.App = {
                         parkingLot.checkIn(vNum, time, {
                             from: accounts[0]
                         }).then(
-                            function () {
+                            function() {
                                 return parkingLot.checkInTime.call(vNum)
                             }).then(
-                            function (storedInTime) {
+                            function(storedInTime) {
                                 console.log(storedInTime)
                                 console.log(storedInTime.toNumber())
                                 if (time == storedInTime.toNumber()) {
@@ -114,20 +114,20 @@ window.App = {
                             })
                     }
                 })
-        }).catch(function (e) {
+        }).catch(function(e) {
             console.log(e)
         })
     },
 
-    checkOut: function (vNum, offerCode, time) {
+    checkOut: function(vNum, offerCode, time) {
         var self = this
-        ParkingLot.deployed().then(function (instance) {
+        ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
             parkingLot.getTimeDifference(vNum, {
                     from: accounts[0]
                 })
                 .then(
-                    function (timeDiff) {
+                    function(timeDiff) {
                         console.log(timeDiff);
                         timeDiff = timeDiff.toNumber() * 0.6
                         var amt, discount
@@ -153,7 +153,7 @@ window.App = {
                         return amt
                     })
                 .then(
-                    function (amount) {
+                    function(amount) {
                         if (amount == -1) {
                             $('#checkOutResult').html('Car has not been checked in yet!')
                             $('#checkOutResult').show()
@@ -164,44 +164,44 @@ window.App = {
                         }
                     }
                 )
-        }).catch(function (e) {
+        }).catch(function(e) {
             console.log(e)
         })
     },
 
-    destroyContract: function () {
+    destroyContract: function() {
         var self = this
-        ParkingLot.deployed().then(function (instance) {
+        ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
             parkingLot.destroy({
-                from: accounts[0]
-            }).then(
-                function () {
-                    $('#destroyContractResult').html('contract destroyed. pls refresh page to reflect balance')
-                }) // end of conference destroy
-        }).catch(function (e) {
+                    from: accounts[0]
+                }).then(
+                    function() {
+                        $('#destroyContractResult').html('contract destroyed. pls refresh page to reflect balance')
+                    }) // end of conference destroy
+        }).catch(function(e) {
             console.log(e)
         })
     },
 
 }
 
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined') {
         console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
-        // Use Mist/MetaMask's provider
+            // Use Mist/MetaMask's provider
         window.web3 = new Web3(web3.currentProvider)
     } else {
         console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask")
-        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+            // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
     }
 
     ParkingLot.setProvider(web3.currentProvider)
     App.start()
 
-    $('#addVehicle').click(function () {
+    $('#addVehicle').click(function() {
         var vNum = $('#vnum').val()
         var owner = $('#owner').val()
         if (vNum <= 999 || vNum > 9999 || owner == '')
@@ -210,7 +210,7 @@ window.addEventListener('load', function () {
             App.addVehicle(owner, vNum)
     })
 
-    $('#check-in').click(function () {
+    $('#check-in').click(function() {
         var vNum = $('#vnum-chkin').val()
         var time = $('#time-chkin').val()
         if (vNum <= 999 || vNum > 9999 || time < 999 || time > 2400)
@@ -219,22 +219,23 @@ window.addEventListener('load', function () {
             App.checkIn(vNum, time)
     })
 
-    $('#check-out').click(function () {
+    $('#check-out').click(function() {
         var vNum = $('#vnum-chkout').val()
         var offerCode = $('#offerCode').val()
         var time = $('#time-chkout').val()
-        if (vNum <= 999 || vNum > 9999 || time < 999 || time > 2400)
-            $('#checkoutResult').html('Please Enter Valid Vehicle Number (or) Time')
-        else
+        if (vNum <= 999 || vNum > 9999 || time < 999 || time > 2400) {
+            $('#checkOutResult').html('Please Enter Valid Vehicle Number (or) Time')
+            $('#checkOutResult').show()
+        } else
             App.checkOut(vNum, offerCode, time)
     })
 
-    $('#refundTicket').click(function () {
+    $('#refundTicket').click(function() {
         var val = $('#ticketPrice').val()
         var buyerAddress = $('#refBuyerAddress').val()
         App.refundTicket(buyerAddress, web3.toWei(val))
     })
-    $('#setRating').click(function () {
+    $('#setRating').click(function() {
         var val = $('#rating').text()
         var buyerAddress = $('#ratingAddress').val()
         $.drawRatingGraph() // here for testing
@@ -245,27 +246,27 @@ window.addEventListener('load', function () {
             App.setRating(buyerAddress, val)
     })
 
-    $('#destroyContract').click(function () {
+    $('#destroyContract').click(function() {
         App.destroyContract()
     })
 
-    $.loadAddresses = function () {
+    $.loadAddresses = function() {
         var index = 0
 
-        accounts.forEach(function (element) {
+        accounts.forEach(function(element) {
             $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td><td>' + Number(getBalance(element)).toFixed(20) + '</td></tr>')
         }, this);
     }
 
-    $.addRegistered = function (vNum, owner) {
+    $.addRegistered = function(vNum, owner) {
         $('#carsTable').append('<tr><td>' + vNum + '</td><td>' + owner + '</td></tr>')
     }
 
-    $.addCheckIn = function (vNum, time) {
+    $.addCheckIn = function(vNum, time) {
         $('#checkinTable').append('<tr><td>' + time + '</td><td>' + vNum + '</td></tr>')
     }
 
-    $.addHistory = function() {
-
+    $.addHistory = function(inT, outT, vNum, amt, payer) {
+        $('#historyTable').append('<tr><td>' + inT + '</td><td>' + outT + '</td><td>' + vNum + '</td><td>' + amt + '</td><td>' + payer + '</td></tr>')
     }
 })
