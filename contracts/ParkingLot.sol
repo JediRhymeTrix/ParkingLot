@@ -28,7 +28,7 @@ contract ParkingLot {
     }
 
     function checkIn(uint vNo, uint inTime) public {
-        if (checkInTime[vNo] == uint(0x0) || !isRegistered(vNo))
+        if (checkInTime[vNo] != uint(0x0) || !isRegistered(vNo))
             return;
         checkInTime[vNo] = inTime;
     }
