@@ -12,7 +12,7 @@ contract ParkingLot {
 
     function ParkingLot() {
         owner = msg.sender;
-        price = 1; 
+        price = 1;
     }
 
     function isRegistered(uint vNo) public returns(bool status) {
