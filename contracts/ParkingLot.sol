@@ -4,6 +4,7 @@ contract ParkingLot {
     mapping(uint => address) public registeredVehicles;
     mapping(uint => uint) public checkInTime;
     mapping(uint => uint) public checkOutTime;
+    mapping(string => uint) public discount;
 
     //payment variables
 
@@ -12,7 +13,9 @@ contract ParkingLot {
 
     function ParkingLot() {
         owner = msg.sender;
-        price = 1; 
+        price = 1;
+        discount['shop50'] = 50;
+        discount['mov10'] = 10;
     }
 
     function isRegistered(uint vNo) public returns(bool status) {
@@ -21,7 +24,7 @@ contract ParkingLot {
         return true;
     }
 
-    function getRegistered(uint vNo) public{
+    function getRegistered(uint vNo) public {
         if (isRegistered(vNo))
             return;
         registeredVehicles[vNo] = msg.sender;
