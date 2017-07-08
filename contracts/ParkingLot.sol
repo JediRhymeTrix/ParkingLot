@@ -21,11 +21,10 @@ contract ParkingLot {
         return true;
     }
 
-    function getRegistered(uint vNo) public return (bool status){
+    function getRegistered(uint vNo) public{
         if (isRegistered(vNo))
-            return false;
+            return;
         registeredVehicles[vNo] = msg.sender;
-        return true;
     }
 
     function checkIn(uint vNo, uint inTime) public {
