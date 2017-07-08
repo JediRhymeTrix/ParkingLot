@@ -61,6 +61,8 @@ window.App = {
         }).catch(function(e) {
             console.log(e)
         })
+
+        $.loadAddresses()
     },
 
     checkValues: function() {
@@ -363,4 +365,16 @@ window.addEventListener('load', function() {
     $('#destroyContract').click(function() {
         App.destroyContract()
     })
+
+    $('.copyBtn').click(function() {
+        var $row = $(this).closest("tr");
+    })
+
+    $.loadAddresses = function() {
+        var index = 0
+
+        accounts.forEach(function(element) {
+            $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td><td><button class="copyBtn">Copy</button></td></td></tr>')
+        }, this);
+    }
 })
