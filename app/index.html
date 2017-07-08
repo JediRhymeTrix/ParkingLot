@@ -82,7 +82,7 @@
         <label for="time-chkout">Check-out Time: </label>
         <input type="text" id="time-chkout" value="">
         <br><br>
-        <button id="check-out">check-out</button>
+        <button id="check-out">check-out</button><span id="checkOutResult" hidden></span>
         <br><br>
         <div id="payment" hidden>
             <label for="amt">Amount to Pay: </label>
@@ -90,7 +90,7 @@
             <input type="radio" id="payer" name="payer" value="self">Self
             <input type="radio" id="payer" name="payer" value="other">Other
             <input type="text" id="friend" value="" hidden>
-            <button id="pay" disabled>Pay</button>
+            <button id="pay">Pay</button>
             <span id="paymentResult"></span>
         </div>
     </div>

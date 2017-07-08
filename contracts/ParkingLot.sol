@@ -45,9 +45,9 @@ contract ParkingLot {
         payments[msg.sender] = msg.value;
     }
 
-    function getTimeDifference(uint vNo) public returns(uint diff) {
-        if (checkOutTime[vNo] - checkInTime[vNo] <= uint(0x0))
-            return 0;
+    function getTimeDifference(uint vNo) public {
+        if (!isParked[vNo] || checkOutTime[vNo] - checkInTime[vNo] <= uint(0x0))
+            return uint(0x0);
         return checkOutTime[vNo] - checkInTime[vNo];
     }
 
