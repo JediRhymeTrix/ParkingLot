@@ -51,40 +51,11 @@ window.App = {
             parkingLot = instance
             $('#contAddress').html(parkingLot.address)
             $('#contBalance').html(getBalance(parkingLot.address))
-            // self.checkValues()
         })
 
         $.loadAddresses()
     },
 
-    checkValues: function () {
-        Conference.deployed().then(function (instance) {
-            conference = instance
-            conference.quota.call().then(
-                function (quota) {
-                    $('input#confQuota').val(quota)
-                    return conference.organizer.call()
-                }).then(
-                function (organizer) {
-                    // console.log("organizer " + organizer);
-                    $('input#confOrganizer').val(organizer)
-                    return conference.numRegistrants.call()
-                }).then(
-                function (num) {
-                    $('#numRegistrants').html(num.toNumber())
-                    return getBalance(conference.address)
-                }).then(
-                function (balance) {
-                    $('#confBalance').html(balance)
-                    return conference.speaker.call()
-                }).then(
-                function (speaker) {
-                    $('input#speakerAddress').val(speaker)
-                })
-        }).catch(function (e) {
-            console.log(e)
-        })
-    },
     changeQuota: function (val) {
         var conference
         Conference.deployed().then(function (instance) {
@@ -141,25 +112,6 @@ window.App = {
             parkingLot.getRegistered(vNum, {
                 from: owner
             }).then(
-<<<<<<< HEAD
-                function () {
-                    return conference.numRegistrants.call()
-                }).then(
-                function (num) {
-                    $('#numRegistrants').html(num.toNumber())
-                    return conference.registrantsPaid.call(buyerAddress)
-                }).then(
-                function (valuePaid) {
-                    var msgResult
-                    if (valuePaid.toNumber() == ticketPrice) {
-                        msgResult = 'Purchase successful'
-                    } else {
-                        msgResult = 'Purchase failed'
-                    }
-                    $('#buyTicketResult').html(msgResult)
-                }).then(
-=======
->>>>>>> 4cda6dfcbc7cb570bf80df0fd06130d568438687
                 function () {
                     parkingLot.registeredVehicles.call(vNum).then(
                         function (vAddress) {
@@ -181,8 +133,9 @@ window.App = {
             parkingLot.checkIn(vNum, time).then(
                 function () {
                     return parkingLot.checkInTime.call(vNum).then(
-                        
-                    )
+                        function(){
+
+                        })
                 }).then(
                 function (num) {
                     $('#numRegistrants').html(num.toNumber())
