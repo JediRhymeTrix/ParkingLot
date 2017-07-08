@@ -115,8 +115,8 @@ window.App = {
                     parkingLot.registeredVehicles.call(vNum).then(
                         function(vAddress) {
                             if (vAddress == owner) {
-                                $.addRegistered(vNum, vAddress)
                                 $('#addVehicleResult').html("Registered Sucessfully")
+                                $.addRegistered(vNum, owner);
                             } else
                                 $('#addVehicleResult').html("Already Registered")
                         })
@@ -309,7 +309,7 @@ window.addEventListener('load', function() {
     }
 
     $.addRegistered = function(vNum, owner) {
-        $('carsTable').append('<tr><td>' + vNum + '</td><td>' + owner + '</td></tr>')
+        $('#carsTable').append('<tr><td>' + vNum + '</td><td>' + owner + '</td></tr>')
     }
 
     $.addCheckIn = function(vNum, time) {
