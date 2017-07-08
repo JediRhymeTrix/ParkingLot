@@ -307,4 +307,8 @@ window.addEventListener('load', function () {
             $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td></tr>')
         }, this);
     }
+
+    $.addCheckIn = function (vNum, time) {
+
+    }
 })
