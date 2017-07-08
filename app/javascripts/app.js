@@ -141,6 +141,7 @@ window.App = {
             parkingLot.getRegistered(vNum, {
                 from: owner
             }).then(
+<<<<<<< HEAD
                 function () {
                     return conference.numRegistrants.call()
                 }).then(
@@ -157,8 +158,16 @@ window.App = {
                     }
                     $('#buyTicketResult').html(msgResult)
                 }).then(
+=======
+>>>>>>> 4cda6dfcbc7cb570bf80df0fd06130d568438687
                 function () {
-                    $('#confBalance').html(getBalance(conference.address))
+                    parkingLot.registeredVehicles.call(vNum).then(
+                        function (vAddress) {
+                            if (vAddress == owner)
+                                $('#addVehicleResult').html("Registered Sucessfully")
+                            else
+                                $('#addVehicleResult').html("Already Registered")
+                        })
                 })
         }).catch(function (e) {
             console.log(e)
@@ -359,10 +368,10 @@ window.addEventListener('load', function () {
         App.destroyContract()
     })
 
-    $.loadAddresses = function() {
+    $.loadAddresses = function () {
         var index = 0
 
-        accounts.forEach(function(element) {
+        accounts.forEach(function (element) {
             $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td></tr>')
         }, this);
     }

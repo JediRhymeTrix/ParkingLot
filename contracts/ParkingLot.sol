@@ -21,7 +21,11 @@ contract ParkingLot {
         return true;
     }
 
+<<<<<<< HEAD
     function getRegistered(uint vNo) public {
+=======
+    function getRegistered(uint vNo) public{
+>>>>>>> 4cda6dfcbc7cb570bf80df0fd06130d568438687
         if (isRegistered(vNo))
             return;
         registeredVehicles[vNo] = msg.sender;
