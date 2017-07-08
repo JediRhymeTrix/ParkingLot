@@ -1,96 +1,53 @@
 pragma solidity ^ 0.4 .4;
 
 contract ParkingLot {
-  address public organizer;
-  address public speaker;
+    mapping(uint => address) public registeredVehicles;
+    mapping(uint => uint) public checkInTime;
+    mapping(uint => uint) public checkOutTime;
 
-  mapping(address => uint) public registrantsPaid;
-  mapping(address => uint) public ratingGiven;
-  mapping(uint => uint) public ratings;
+    //payment variables
 
-  uint public quota;
-  uint public price;
+    uint public price;
+    address owner;
 
-  string public location;
-
-  uint public numRegistrants;
-
-  // Constructor
-  function ParkingLot(address spk) {
-    organizer = msg.sender;
-    quota = 500;
-    numRegistrants = 0;
-    price = 1;
-    speaker = spk;
-    location = 'Hyderabad';
-  }
-
-  function changeQuota(uint newquota) public {
-    if (msg.sender != organizer) {
-      return;
-    }
-    quota = newquota;
-  }
-
-  function changeLocation(string newLocation) public {
-    if (msg.sender != organizer) {
-      return;
+    function ParkingLot() {
+        owner = msg.sender;
+        price = 1;
     }
 
-    location = newLocation;
-  }
-
-  function buyTicket() public payable returns(bool success) {
-    if (numRegistrants >= quota) {
-      return false;
-    }
-    registrantsPaid[msg.sender] = msg.value;
-    numRegistrants++;
-    return true;
-  }
-
-  function buyMultipleTickets(uint num) public payable returns(bool success) {
-    if (numRegistrants >= quota) {
-      return false;
-    }
-    registrantsPaid[msg.sender] = msg.value;
-    numRegistrants = numRegistrants + num;
-    return true;
-  }
-
-  function refundTicket(address recipient, uint amount) public {
-    if (msg.sender != organizer) {
-      return;
-    }
-    if (registrantsPaid[recipient] == amount) {
-      address myAddress = this;
-      if (myAddress.balance >= amount) {
-        if (!recipient.send(amount)) throw;
-        registrantsPaid[recipient] = 0;
-        numRegistrants--;
-      }
-    }
-  }
-
-  function setRating(uint rating) public {
-    if (msg.sender == organizer || msg.sender == speaker || registrantsPaid[msg.sender] == uint(0x0) || ratingGiven[msg.sender] != uint(0x0)) {
-      return;
+    function isRegistered(uint vNo) public returns(bool status) {
+        if (registeredVehicles[vNo] == address(0))
+            return false;
+        return true;
     }
 
-    if (ratings[rating] == uint(0x0)) {
-      ratings[rating] = 0;
+    function getRegistered(uint vNo) public {
+        if (isRegistered(vNo))
+            return;
+        registeredVehicles[vNo] = msg.sender;
     }
 
-    ratings[rating] = ratings[rating] + 1;
-    ratingGiven[msg.sender] = rating;
-  }
-
-  function destroy() { // so funds not locked in contract forever
-    if (msg.sender == organizer) {
-      address myAddress = this;
-      if (!speaker.send(((myAddress.balance) * (80)) / 100)) throw;
-      suicide(organizer); // send funds to organizer
+    function checkIn(uint vNo, uint inTime) public {
+        if (checkInTime[vNo] == uint(0x0) || !isRegistered(vNo))
+            return;
+        checkInTime[vNo] = inTime;
     }
-  }
 
-} //end of conference
+    function checkOut(uint vNo, uint discountPrice, uint outTime) public {
+        if (checkInTime[vNo] == uint(0x0) || checkInTime[vNo] < outTime)
+            return;
+        checkOutTime[vNo] = outTime;
+        //payment logic
+    }
+
+    function getTimeDifference(uint vNo) public returns(uint diff) {
+        if (checkOutTime[vNo] - checkInTime[vNo] <= uint(0x0))
+            return 0;
+        return checkOutTime[vNo] - checkInTime[vNo];
+    }
+
+    function destroy() public {
+        if (msg.sender == owner)
+            suicide(owner);
+    }
+}
