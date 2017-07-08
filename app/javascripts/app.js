@@ -174,16 +174,15 @@ window.App = {
         })
     },
 
-    buyMultipleTickets: function (buyerAddress, ticketPrice, ticketcount) {
+    checkIn: function (vNum, time) {
         var self = this
-        Conference.deployed().then(function (instance) {
-            conference = instance
-            conference.buyMultipleTickets(ticketcount, {
-                from: buyerAddress,
-                value: ticketcount * ticketPrice
-            }).then(
+        ParkingLot.deployed().then(function (instance) {
+            parkingLot = instance
+            parkingLot.checkIn(vNum, time).then(
                 function () {
-                    return conference.numRegistrants.call()
+                    return parkingLot.checkInTime.call(vNum).then(
+                        
+                    )
                 }).then(
                 function (num) {
                     $('#numRegistrants').html(num.toNumber())
@@ -326,28 +325,16 @@ window.addEventListener('load', function () {
     ParkingLot.setProvider(web3.currentProvider)
     App.start()
 
-    // Wire up the UI elements
-    $('#changeQuota').click(function () {
-        var val = $('#confQuota').val()
-        App.changeQuota(val)
-    })
-
-    $('#changeLocation').click(function () {
-        var val = $('#selectLocation').find(':selected').text()
-        App.changeLocation(val)
-    })
-
     $('#addVehicle').click(function () {
         var vNum = $('#vnum').val()
         var owner = $('#owner').val()
         App.addVehicle(owner, vNum)
     })
 
-    $('#buyTickets').click(function () {
-        var val = $('#ticketPrice').val()
-        var ticketcount = $('#ticketsCount').val()
-        var buyerAddress = $('#mbuyerAddress').val()
-        App.buyMultipleTickets(buyerAddress, web3.toWei(val), ticketcount)
+    $('#check-in').click(function () {
+        var vNum = $('#vnum-chkin').val()
+        var time = $('#vnum-chkin').val()
+        App.checkIn(vNum, time)
     })
     $('#refundTicket').click(function () {
         var val = $('#ticketPrice').val()
