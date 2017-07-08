@@ -392,4 +392,8 @@ window.addEventListener('load', function() {
     $.addCheckIn = function(vNum, time) {
         $('#checkinTable').append('<tr><td>' + time + '</td><td>' + vNum + '</td></tr>')
     }
+
+    $.addHistory = function() {
+
+    }
 })
