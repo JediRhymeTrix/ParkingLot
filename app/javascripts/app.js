@@ -150,6 +150,31 @@ window.App = {
         })
     },
 
+    checkOut: function(vNum, offerCode, time) {
+        var self = this
+        ParkingLot.deployed().then(function(instance) {
+            parkingLot = instance
+            parkingLot.getTimeDifference(vNo, {})
+            parkingLot.checkOut(vNum, time, {
+                from: accounts[0]
+            }).then(
+                function() {
+                    return parkingLot.checkInTime.call(vNum)
+                }).then(
+                function(storedInTime) {
+                    if (time == storedInTime) {
+                        $('#checkinResult').html('Checked In Sucessfull at : ' + time)
+                        $.addCheckIn(vNum, storedInTime);
+                    } else if (storedInTime == 0)
+                        $('#checkinResult').html('Vehicle Not Registered')
+                    else
+                        $('#checkinResult').html('Already Checked In at : ' + storedInTime)
+                })
+        }).catch(function(e) {
+            console.log(e)
+        })
+    },
+
     refundTicket: function(buyerAddress, ticketPrice) {
         var self = this
         Conference.deployed().then(function(instance) {
@@ -281,6 +306,15 @@ window.addEventListener('load', function() {
         var time = $('#time-chkin').val()
         App.checkIn(vNum, time)
     })
+
+    $('#check--out').click(function() {
+        var vNum = $('#vnum-chkout').val()
+        var offerCode = $('#offerCode').val()
+        var time = $('#time-chkout').val()
+
+        App.checkOut(vNum, offerCode, time)
+    })
+
     $('#refundTicket').click(function() {
         var val = $('#ticketPrice').val()
         var buyerAddress = $('#refBuyerAddress').val()

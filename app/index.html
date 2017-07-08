@@ -84,12 +84,15 @@
         <br><br>
         <button id="check-out">check-out</button>
         <br><br>
-        <label for="amt">Amount to Pay: </label>
-        <input type="text" id="amt" value="" readonly>
-        <input type="radio" id="payer" name="payer" value="self">Self
-        <input type="radio" id="payer" name="payer" value="other">Other
-        <button id="pay" disabled>Pay</button>
-        <span id="paymentResult"></span>
+        <div id="payment" hidden>
+            <label for="amt">Amount to Pay: </label>
+            <input type="text" id="amt" value="" readonly>
+            <input type="radio" id="payer" name="payer" value="self">Self
+            <input type="radio" id="payer" name="payer" value="other">Other
+            <input type="text" id="friend" value="" hidden>
+            <button id="pay" disabled>Pay</button>
+            <span id="paymentResult"></span>
+        </div>
     </div>
 
     <div class="section">
