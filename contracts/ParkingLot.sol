@@ -9,12 +9,11 @@ contract ParkingLot {
 
     //payment variables
 
-    uint public price;
+    uint public diff = 0;
     address owner;
 
     function ParkingLot() {
         owner = msg.sender;
-        price = 1;
     }
 
     function isRegistered(uint vNo) public returns(bool status) {
@@ -47,8 +46,8 @@ contract ParkingLot {
 
     function getTimeDifference(uint vNo) public {
         if (!isParked[vNo] || checkOutTime[vNo] - checkInTime[vNo] <= uint(0x0))
-            return uint(0x0);
-        return checkOutTime[vNo] - checkInTime[vNo];
+            diff = uint(0x0);
+        diff = checkOutTime[vNo] - checkInTime[vNo];
     }
 
     function destroy() public {
