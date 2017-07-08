@@ -4,6 +4,7 @@ contract ParkingLot {
     mapping(uint => address) public registeredVehicles;
     mapping(uint => uint) public checkInTime;
     mapping(uint => uint) public checkOutTime;
+    mapping(address => uint) public payments;
 
     //payment variables
 
@@ -33,11 +34,12 @@ contract ParkingLot {
         checkInTime[vNo] = inTime;
     }
 
-    function checkOut(uint vNo, uint discountPrice, uint outTime) public {
+    function checkOut(uint vNo, uint outTime) public payable {
         if (checkInTime[vNo] == uint(0x0) || checkInTime[vNo] < outTime)
             return;
         checkOutTime[vNo] = outTime;
         //payment logic
+        payments[msg.sender] = msg.value;
     }
 
     function getTimeDifference(uint vNo) public returns(uint diff) {
