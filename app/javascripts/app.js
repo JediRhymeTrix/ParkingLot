@@ -39,7 +39,6 @@ window.App = {
             }
 
             accounts = accs
-            // console.log(accounts);
             account = accounts[0]
             self.initializeParkingLot()
         })
@@ -130,28 +129,21 @@ window.App = {
         var self = this
         ParkingLot.deployed().then(function (instance) {
             parkingLot = instance
-            parkingLot.checkIn(vNum, time).then(
+            parkingLot.checkIn(vNum, time, {
+                from: accounts[0]
+            }).then(
                 function () {
-                    return parkingLot.checkInTime.call(vNum).then(
-                        function(){
-
-                        })
+                    return parkingLot.checkInTime.call(vNum)
                 }).then(
-                function (num) {
-                    $('#numRegistrants').html(num.toNumber())
-                    return conference.registrantsPaid.call(buyerAddress)
-                }).then(
-                function (valuePaid) {
-                    var msgResult
-                    if (valuePaid.toNumber() == ticketcount * ticketPrice) {
-                        msgResult = 'Purchase successful'
-                    } else {
-                        msgResult = 'Purchase failed'
+                function (storedInTime) {
+                    if (time == storedInTime){
+                        $('#checkinResult').html('Checked In Sucessfull at : ' + time)
+                        $.addCheckIn(vNum, storedInTime);
                     }
-                    $('#buyTicketsResult').html(msgResult)
-                }).then(
-                function () {
-                    $('#confBalance').html(getBalance(conference.address))
+                    else if (storedInTime == 0)
+                        $('#checkinResult').html('Vehicle Not Registered')
+                    else
+                        $('#checkinResult').html('Already Checked In at : ' + storedInTime)
                 })
         }).catch(function (e) {
             console.log(e)
