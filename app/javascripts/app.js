@@ -93,7 +93,7 @@ window.App = {
             parkingLot = instance
             parkingLot.isParked.call(vNum).then(
                 function(status) {
-                    console.log(status)
+                    // console.log(status)
                     if (status)
                         $('#checkinResult').html('Already Checked In')
                     else {
@@ -104,7 +104,7 @@ window.App = {
                                 return parkingLot.checkInTime.call(vNum)
                             }).then(
                             function(storedInTime) {
-                                console.log(storedInTime)
+                                // console.log(storedInTime)
                                 console.log(storedInTime.toNumber())
                                 if (time == storedInTime.toNumber()) {
                                     $('#checkinResult').html('Checked In Successful at : ' + time)
@@ -123,16 +123,20 @@ window.App = {
         var self = this
         ParkingLot.deployed().then(function(instance) {
             parkingLot = instance
-            parkingLot.getTimeDifference(vNum, {
+            parkingLot.checkOut(vNum, time, {
                     from: accounts[0]
                 })
                 .then(
-                    function(timeDiff) {
-                        console.log(timeDiff);
-                        timeDiff = timeDiff.toNumber() * 0.6
-                        var amt, discount
+                    function() {
+                        return parkingLot.diff.call(vNum)
+                    })
+                .then(
+                    function(diff) {
+                        console.log(diff);
+                        var timeDiff = diff.toNumber() * 0.6
+                        var amt
 
-                        if (timeDiff = 0)
+                        if (timeDiff == 0)
                             return -1
 
                         if (timeDiff < 60) amt = 5
@@ -230,22 +234,6 @@ window.addEventListener('load', function() {
             App.checkOut(vNum, offerCode, time)
     })
 
-    $('#refundTicket').click(function() {
-        var val = $('#ticketPrice').val()
-        var buyerAddress = $('#refBuyerAddress').val()
-        App.refundTicket(buyerAddress, web3.toWei(val))
-    })
-    $('#setRating').click(function() {
-        var val = $('#rating').text()
-        var buyerAddress = $('#ratingAddress').val()
-        $.drawRatingGraph() // here for testing
-
-        if (buyerAddress.length != 42)
-            $('#ratingResult').html('Please enter a valid address')
-        else
-            App.setRating(buyerAddress, val)
-    })
-
     $('#destroyContract').click(function() {
         App.destroyContract()
     })
@@ -254,7 +242,7 @@ window.addEventListener('load', function() {
         var index = 0
 
         accounts.forEach(function(element) {
-            $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td><td>' + Number(getBalance(element)).toFixed(20) + '</td></tr>')
+            $('#addressTable').append('<tr><td>' + (index++) + '</td><td>' + element + '</td><td>' + Number(getBalance(element)).toFixed(2) + '</td></tr>')
         }, this);
     }
 

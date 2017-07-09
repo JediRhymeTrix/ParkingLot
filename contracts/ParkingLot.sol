@@ -6,14 +6,17 @@ contract ParkingLot {
     mapping(uint => bool) public isParked;
     mapping(uint => uint) public checkOutTime;
     mapping(address => uint) public payments;
+    mapping(uint => uint) public diff;
+
+    uint[] history;
 
     //payment variables
 
-    uint public diff = 0;
     address owner;
 
     function ParkingLot() {
         owner = msg.sender;
+        history = new uint[](4);
     }
 
     function isRegistered(uint vNo) public returns(bool status) {
@@ -29,25 +32,33 @@ contract ParkingLot {
     }
 
     function checkIn(uint vNo, uint inTime) public {
-        if (checkInTime[vNo] != uint(0x0) || !isRegistered(vNo))
+        if (checkInTime[vNo] != uint(0x0) || !isRegistered(vNo) || isParked[vNo])
             return;
         checkInTime[vNo] = inTime;
         isParked[vNo] = true;
     }
 
-    function checkOut(uint vNo, uint outTime) public payable {
-        if (checkInTime[vNo] == uint(0x0) || checkInTime[vNo] < outTime)
+    function checkOut(uint vNo, uint outTime) public {
+        if (checkInTime[vNo] == uint(0x0) || checkInTime[vNo] > outTime || !isParked[vNo]) {
+            diff[vNo] = 0;
             return;
+        }
+
         checkOutTime[vNo] = outTime;
         isParked[vNo] = false;
-        //payment logic
-        payments[msg.sender] = msg.value;
+
+        diff[vNo] = checkOutTime[vNo] - checkInTime[vNo];
     }
 
-    function getTimeDifference(uint vNo) public {
-        if (!isParked[vNo] || checkOutTime[vNo] - checkInTime[vNo] <= uint(0x0))
-            diff = uint(0x0);
-        diff = checkOutTime[vNo] - checkInTime[vNo];
+    function makePayment(uint vNo) public payable returns(uint[] history) {
+        payments[msg.sender] = msg.value;
+
+        history[0] = checkInTime[vNo];
+        history[1] = checkOutTime[vNo];
+        history[2] = vNo;
+        history[3] = msg.value;
+
+        return history;
     }
 
     function destroy() public {
