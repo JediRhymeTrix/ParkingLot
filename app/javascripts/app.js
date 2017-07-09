@@ -132,7 +132,7 @@ window.App = {
                     })
                 .then(
                     function(diff) {
-                        console.log(diff);
+                        console.log(diff.toNumber());
                         var timeDiff = diff.toNumber() * 0.6
                         var amt
 
@@ -165,6 +165,7 @@ window.App = {
                             $('#checkOutResult').hide()
                             $('#amt').val(amount)
                             $('#payment').show()
+                            $.deleteCheckin(vNum)
                         }
                     }
                 )
@@ -234,6 +235,10 @@ window.addEventListener('load', function() {
             App.checkOut(vNum, offerCode, time)
     })
 
+    $('#payer').on('change', function() { // TODO: nothing happens when OTHER is selected. Fix this.
+        console.log($("input[id='payer']:checked").val())
+    })
+
     $('#destroyContract').click(function() {
         App.destroyContract()
     })
@@ -251,10 +256,14 @@ window.addEventListener('load', function() {
     }
 
     $.addCheckIn = function(vNum, time) {
-        $('#checkinTable').append('<tr><td>' + time + '</td><td>' + vNum + '</td></tr>')
+        $('#checkinTable').append('<tr id="' + vNum + '"><td>' + time + '</td><td>' + vNum + '</td></tr>')
     }
 
     $.addHistory = function(inT, outT, vNum, amt, payer) {
         $('#historyTable').append('<tr><td>' + inT + '</td><td>' + outT + '</td><td>' + vNum + '</td><td>' + amt + '</td><td>' + payer + '</td></tr>')
+    }
+
+    $.deleteCheckin = function(row) {
+        $('#checkinTable #' + row).remove()
     }
 })
